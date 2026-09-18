@@ -1,9 +1,11 @@
+using NUnit;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using static PlayerAuthoring;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 partial struct ProjectileSpawnSystem : ISystem
 {
@@ -17,6 +19,7 @@ partial struct ProjectileSpawnSystem : ISystem
     public void OnUpdate(ref SystemState state)
     {
         var ecb = new EntityCommandBuffer(Allocator.Temp);
+        var elapsedTime = SystemAPI.Time.ElapsedTime;
 
         foreach (var (player, requests) in SystemAPI.Query<RefRO<PlayerData>, DynamicBuffer<ProjectileSpawnRequest>>())
         {
@@ -33,6 +36,10 @@ partial struct ProjectileSpawnSystem : ISystem
                         )
                     )
                 );
+                var bulletData = state.EntityManager.GetComponentData<BulletData>(player.ValueRO.BulletPrefab);
+
+                ecb.SetComponent(bullet, new BulletLifeTimestamp { Value = elapsedTime + bulletData.LifeTime });
+
 
             }
             requests.Clear();
@@ -41,5 +48,5 @@ partial struct ProjectileSpawnSystem : ISystem
         ecb.Dispose();
     }
 
-  
+
 }

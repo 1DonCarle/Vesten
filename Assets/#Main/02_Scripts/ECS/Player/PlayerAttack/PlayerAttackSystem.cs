@@ -23,7 +23,7 @@ partial struct PlayerAttackSystem : ISystem
 
             float3 spawnPosition = SystemAPI.GetComponent<LocalTransform>(playerEntity).Position; // muzzle position
 
-            float3 direction = math.normalize(commands.ValueRO.PointerWorldPosition - spawnPosition);
+            float3 direction = math.normalize(new float3(commands.ValueRO.PointerWorldPosition.x,0,commands.ValueRO.PointerWorldPosition.z) - new float3(spawnPosition.x, 0, spawnPosition.z));
             buffer.Add(new ProjectileSpawnRequest
             {
                 Position = spawnPosition,

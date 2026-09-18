@@ -18,21 +18,19 @@ public partial class PlayerInputSystem : SystemBase
     {
         var movementInput = (float2)_input.Player.Move.ReadValue<Vector2>();
         var attackInput = _input.Player.Attack.triggered;
-        //var lookInput = (float2)_input.Player.Look.ReadValue<Vector2>();
 
 
         foreach (var (direction, commands, player) in SystemAPI.Query<RefRW<CharacterMoveDirection>, RefRW<PlayerCommands>>().WithAll<PlayerTag>().WithEntityAccess())
         {
             direction.ValueRW.Value = movementInput;
             commands.ValueRW.Attack = attackInput;
-            //commands.ValueRW.PointerWorldPosition = lookInput;
 
 
             Vector2 screenPosition = _input.Player.Look.ReadValue<Vector2>();
 
             Ray ray = Camera.main.ScreenPointToRay(screenPosition);
 
-            Plane groundPlane = new Plane(Vector3.up, 0f);
+            Plane groundPlane = new Plane(Vector3.up, 1f);
 
             if (groundPlane.Raycast(ray, out float distance))
             {

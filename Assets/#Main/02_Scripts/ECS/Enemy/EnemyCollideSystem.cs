@@ -32,7 +32,7 @@ partial struct EnemyCollideSystem : ISystem
             PlayerLookup = SystemAPI.GetComponentLookup<PlayerTag>(true),
             EnemyCollideDataLookup = SystemAPI.GetComponentLookup<EnemyCollideData>(true),
             CooldownLookup = SystemAPI.GetComponentLookup<EnemyCollisionIsOnCooldown>(),
-            DamageBufferLookup = SystemAPI.GetBufferLookup<DamageThisFrame>(),
+            DamageBufferLookup = SystemAPI.GetBufferLookup<DamageRequest>(),
             ElapsedTime = elapsedTime
         };
 
@@ -48,7 +48,7 @@ public struct EnemyCollideJob : ICollisionEventsJob
     [ReadOnly] public ComponentLookup<PlayerTag> PlayerLookup;
     [ReadOnly] public ComponentLookup<EnemyCollideData> EnemyCollideDataLookup;
     public ComponentLookup<EnemyCollisionIsOnCooldown> CooldownLookup;
-    public BufferLookup<DamageThisFrame> DamageBufferLookup;
+    public BufferLookup<DamageRequest> DamageBufferLookup;
 
     public double ElapsedTime;
     public void Execute(CollisionEvent collisionEvent)
@@ -77,6 +77,12 @@ public struct EnemyCollideJob : ICollisionEventsJob
         CooldownLookup.SetComponentEnabled(enemyEntity, true);
 
         var playerDamageBuffer = DamageBufferLookup[playerEntity];
-        playerDamageBuffer.Add(new DamageThisFrame { Value = collideData.CollideDamage });
+
+        
+        playerDamageBuffer.Add(new DamageRequest {
+            Target = playerEntity,
+            Source = enemyEntity,
+            Damage = collideData.CollideDamage
+             });
     }
 }

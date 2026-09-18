@@ -25,10 +25,6 @@ public struct CharacterCurrentHitPoints : IComponentData
 {
     public int Value;
 }
-public struct DamageThisFrame : IBufferElementData
-{
-    public int Value;
-}
 #endregion
 public class CharacterAuthoring : MonoBehaviour
 {
@@ -54,7 +50,7 @@ public class CharacterAuthoring : MonoBehaviour
             {
                 Value = authoring.HitPoints
             });
-            AddBuffer<DamageThisFrame>(entity);
+            AddBuffer<DamageRequest>(entity);
             AddBuffer<ProjectileSpawnRequest>(entity);
 
         }

@@ -4,7 +4,8 @@ using UnityEngine;
 class PlayerBulletAuthoring : MonoBehaviour
 {
     
-}public struct HitEnemy : IBufferElementData
+}
+public struct HitEnemy : IBufferElementData
 {
     public Entity Enemy;
 }
@@ -23,10 +24,12 @@ class PlayerBulletAuthoringBaker : Baker<PlayerBulletAuthoring>
       {
           Speed = 10f,
           Damage = 1f,
-          LifeTime = 5f,
+          LifeTime = 2f,
           BulletPenetration = 1
         });
         AddComponent<BulletLifeTimestamp>(entity);
         AddBuffer<HitEnemy>(entity);
+        AddComponent<DestroyEntityFlag>(entity);
+        SetComponentEnabled<DestroyEntityFlag>(entity, false);
     }
 }
