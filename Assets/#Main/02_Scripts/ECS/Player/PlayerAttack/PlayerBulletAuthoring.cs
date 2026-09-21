@@ -1,10 +1,5 @@
 using Unity.Entities;
 using UnityEngine;
-
-class PlayerBulletAuthoring : MonoBehaviour
-{
-    
-}
 public struct HitEnemy : IBufferElementData
 {
     public Entity Enemy;
@@ -14,22 +9,33 @@ public struct BulletLifeTimestamp : IComponentData
     public double Value;
 }
 
-class PlayerBulletAuthoringBaker : Baker<PlayerBulletAuthoring>
+public class PlayerBulletAuthoring : MonoBehaviour
 {
-    public override void Bake(PlayerBulletAuthoring authoring)
-    {
-        var entity = GetEntity(TransformUsageFlags.Dynamic);
+    public float bulletSpeed = 10f;
+    public float bulletDamage = 1f;
+    public float bulletLifeTime = 2f;
+    public int bulletPenetration = 1;
 
-        AddComponent(entity, new BulletData
-      {
-          Speed = 10f,
-          Damage = 1f,
-          LifeTime = 2f,
-          BulletPenetration = 1
-        });
-        AddComponent<BulletLifeTimestamp>(entity);
-        AddBuffer<HitEnemy>(entity);
-        AddComponent<DestroyEntityFlag>(entity);
-        SetComponentEnabled<DestroyEntityFlag>(entity, false);
+    public class PlayerBulletAuthoringBaker : Baker<PlayerBulletAuthoring>
+    {
+      
+
+        public override void Bake(PlayerBulletAuthoring authoring)
+        {
+            var entity = GetEntity(TransformUsageFlags.Dynamic);
+
+            AddComponent(entity, new BulletData
+            {
+                Speed = authoring.bulletSpeed,
+                Damage = authoring.bulletDamage,
+                LifeTime = authoring.bulletLifeTime,
+                BulletPenetration = authoring.bulletPenetration
+            });
+            AddComponent<BulletLifeTimestamp>(entity);
+            AddBuffer<HitEnemy>(entity);
+            AddComponent<DestroyEntityFlag>(entity);
+            SetComponentEnabled<DestroyEntityFlag>(entity, false);
+        }
     }
 }
+

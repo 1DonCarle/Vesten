@@ -38,11 +38,6 @@ partial struct DecisionSystem : ISystem
                     //UpdateFleeState(behaviourState, target, attackData);
                     break;
             }
-
-
-
-
-     
         }
     } 
 }

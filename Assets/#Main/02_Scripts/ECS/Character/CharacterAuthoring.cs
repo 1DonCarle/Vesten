@@ -25,6 +25,10 @@ public struct CharacterCurrentHitPoints : IComponentData
 {
     public int Value;
 }
+public struct IsDead : IComponentData
+{
+    public bool Value;
+}
 #endregion
 public class CharacterAuthoring : MonoBehaviour
 {
@@ -52,7 +56,12 @@ public class CharacterAuthoring : MonoBehaviour
             });
             AddBuffer<DamageRequest>(entity);
             AddBuffer<ProjectileSpawnRequest>(entity);
-
+            AddComponent(entity, new IsDead
+            {
+                Value = false
+            });
+            AddComponent<DestroyEntityFlag>(entity);
+            SetComponentEnabled<DestroyEntityFlag>(entity, false);
         }
     }
 }

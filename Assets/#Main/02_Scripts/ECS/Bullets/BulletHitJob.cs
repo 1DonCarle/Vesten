@@ -42,6 +42,20 @@ public partial struct BulletHitJob : ITriggerEventsJob
 
         var attackDamage = BulletLookup[bulletEntity].Damage;
         var bulletData = BulletLookup[bulletEntity];
+        var damageBuffer = DamageRequestLookup[enemyEntity];
+
+        damageBuffer.Add(new DamageRequest
+        {
+            Target = enemyEntity,
+            Source = bulletEntity,
+            Damage = attackDamage,
+        });
+
+        // TODO: Add VFX
+
+        // TODO: Add SFX
+
+        // TODO: Take damage animation / shader graph
 
 
         bulletData.BulletPenetration--;

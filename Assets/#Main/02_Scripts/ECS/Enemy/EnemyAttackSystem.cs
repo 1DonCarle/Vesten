@@ -50,6 +50,8 @@ partial struct EnemyMeleeAttackSystem : ISystem
                 // Add the request
                 vfxSingleton.Manager.AddRequest(req);
 
+                // Create and fire the projectile
+
                 attackData.ValueRW.CurrentBullets--;
                 if (attackData.ValueRW.CurrentBullets <= 0)
                     enemyState.ValueRW.Value = EnemyBehaviour.Reload;
@@ -67,24 +69,10 @@ partial struct EnemyMeleeAttackSystem : ISystem
                 attackData.ValueRW.ReloadCooldown = attackData.ValueRO.ReloadTime;
                 attackData.ValueRW.CurrentBullets = attackData.ValueRO.MagasineSize;
 
-
                 enemyState.ValueRW.Value = EnemyBehaviour.Chase;
 
 
             }
-
-
-
-            // Set state to aim
-
-            //Only take damage if the player is hit
-            //playerHP.ValueRW.Value -= attackData.ValueRO.AttackDamage;
-
-
-
         }
-
-
-
     }
 }

@@ -125,3 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2aaf9e7e2b715ee4f82712ceeff3bbf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerBulletAuthoring
+  bulletSpeed: 30
+  bulletDamage: 10
+  bulletLifeTime: 2
+  bulletPenetration: 1
