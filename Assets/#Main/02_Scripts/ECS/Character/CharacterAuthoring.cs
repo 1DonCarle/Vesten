@@ -1,7 +1,6 @@
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
-using static ProjectileSpawnSystem;
 
 public struct InitializeCharacterFlag : IComponentData, IEnableableComponent{}
 #region // Character Components
@@ -25,9 +24,11 @@ public struct CharacterCurrentHitPoints : IComponentData
 {
     public int Value;
 }
-public struct IsDead : IComponentData
+public struct Death : IComponentData
 {
-    public bool Value;
+    public bool IsDead;
+    public bool DeathStarted;
+    public float DestroyTime;
 }
 #endregion
 public class CharacterAuthoring : MonoBehaviour
@@ -56,9 +57,11 @@ public class CharacterAuthoring : MonoBehaviour
             });
             AddBuffer<DamageRequest>(entity);
             AddBuffer<ProjectileSpawnRequest>(entity);
-            AddComponent(entity, new IsDead
+            AddComponent(entity, new Death
             {
-                Value = false
+                IsDead = false,
+                DestroyTime = 1f,
+                DeathStarted = false
             });
             AddComponent<DestroyEntityFlag>(entity);
             SetComponentEnabled<DestroyEntityFlag>(entity, false);

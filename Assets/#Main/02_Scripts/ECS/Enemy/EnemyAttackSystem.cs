@@ -4,7 +4,6 @@ using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
-using static PlayerAuthoring;
 
 partial struct EnemyMeleeAttackSystem : ISystem
 {
@@ -13,6 +12,7 @@ partial struct EnemyMeleeAttackSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
+        
         float deltaTime = SystemAPI.Time.DeltaTime;
 
         Entity player = SystemAPI.GetSingletonEntity<PlayerTag>();
@@ -24,6 +24,9 @@ partial struct EnemyMeleeAttackSystem : ISystem
 
         foreach (var (attackData, enemyTransform, enemyState, entity) in SystemAPI.Query<RefRW<EnemyAttackData>, RefRO<LocalTransform>, RefRW<EnemyBehaviourState>>().WithEntityAccess())
         {
+            if(enemyState.ValueRO.Value == EnemyBehaviour.Dying)
+                continue;
+
             if (enemyState.ValueRO.Value == EnemyBehaviour.Aim)
             {
                 attackData.ValueRW.AimCooldownTimer -= deltaTime;

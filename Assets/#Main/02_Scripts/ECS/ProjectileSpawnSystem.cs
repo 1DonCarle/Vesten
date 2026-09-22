@@ -4,17 +4,15 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
-using static PlayerAuthoring;
-using static UnityEngine.Rendering.DebugUI.Table;
+public struct ProjectileSpawnRequest : IBufferElementData
+{
+    public float3 Position;
+    public float3 Direction;
+}
 
 partial struct ProjectileSpawnSystem : ISystem
 {
-    public struct ProjectileSpawnRequest : IBufferElementData
-    {
-        public float3 Position;
-        public float3 Direction;
-    }
-
+ 
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {

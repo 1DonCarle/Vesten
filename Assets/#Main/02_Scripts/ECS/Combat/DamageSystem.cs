@@ -7,7 +7,7 @@ partial struct DamageSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-     foreach(var (death, hitPoints, requests) in SystemAPI.Query<RefRW<IsDead>, RefRW<CharacterCurrentHitPoints>, DynamicBuffer<DamageRequest>>())
+     foreach(var (death, hitPoints, requests) in SystemAPI.Query<RefRW<Death>, RefRW<CharacterCurrentHitPoints>, DynamicBuffer<DamageRequest>>())
         {
             foreach (var request in requests)
             {
@@ -16,7 +16,7 @@ partial struct DamageSystem : ISystem
             requests.Clear();
             if (hitPoints.ValueRW.Value <= 0)
             {
-                death.ValueRW.Value = true;
+                death.ValueRW.IsDead= true;
             }
         }
     }

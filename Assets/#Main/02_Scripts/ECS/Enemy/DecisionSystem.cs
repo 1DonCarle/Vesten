@@ -9,6 +9,8 @@ partial struct DecisionSystem : ISystem
     {
         foreach(var (behaviourState, target, attackData, config) in SystemAPI.Query<RefRW<EnemyBehaviourState>, RefRO<EnemyTarget>, RefRO<EnemyAttackData>, RefRO<EnemyConfig>>())
         {
+            if(behaviourState.ValueRO.Value == EnemyBehaviour.Dying)
+                continue;
             switch(behaviourState.ValueRO.Value)
             {
                 case EnemyBehaviour.Idle:

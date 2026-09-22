@@ -1321,6 +1321,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7930c6a551a0ca345b8fe2fe2d6448b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAuthoring
+  MagasineSize: 6
+  ReloadTime: 1
   BulletPrefab: {fileID: 1906093799326893370, guid: 4773fb1a0c09d134f80ebad1165ac12e, type: 3}
 --- !u!1 &1937916986
 GameObject:

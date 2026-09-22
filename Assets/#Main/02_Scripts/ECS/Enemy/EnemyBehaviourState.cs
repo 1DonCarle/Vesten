@@ -6,7 +6,8 @@ public enum EnemyBehaviour : byte
     Aim,
     Attack,
     Reload,
-    Flee
+    Flee,
+    Dying
 }
 public struct EnemyBehaviourState : IComponentData
 {
