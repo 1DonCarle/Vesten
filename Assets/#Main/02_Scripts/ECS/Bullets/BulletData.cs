@@ -6,4 +6,5 @@ public struct BulletData : IComponentData
     public float LifeTime;
     public float Damage;
     public int BulletPenetration;
+    public uint ProjectileId;
 }

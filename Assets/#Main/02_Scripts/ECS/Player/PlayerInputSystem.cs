@@ -30,7 +30,7 @@ public partial class PlayerInputSystem : SystemBase
 
             Ray ray = Camera.main.ScreenPointToRay(screenPosition);
 
-            Plane groundPlane = new Plane(Vector3.up, 1f);
+            Plane groundPlane = new Plane(Vector3.up, -1f);
 
             if (groundPlane.Raycast(ray, out float distance))
             {

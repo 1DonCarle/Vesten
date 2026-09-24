@@ -2,14 +2,18 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Physics;
 
+
 public partial struct BulletHitJob : ITriggerEventsJob
 {
+
+
     public ComponentLookup<BulletData> BulletLookup;
     [ReadOnly] public ComponentLookup<EnemyTag> EnemyLookup;
     public BufferLookup<DamageRequest> DamageRequestLookup;
     public ComponentLookup<DestroyEntityFlag> DestroyEntityLookup;
     public BufferLookup<HitEnemy> HitEnemyBufferLookup;
-    public float DeltaTime;
+    public BufferLookup<VFXDestroyBulletEvent> VFXDestroyBulletEventLookup;
+    public Entity VFXDestroyEntity;
     public void Execute(TriggerEvent triggerEvent)
     {
         // Implement bullet collision logic here
@@ -63,7 +67,16 @@ public partial struct BulletHitJob : ITriggerEventsJob
 
         if (bulletData.BulletPenetration <= 0)
         {
+            // Add VFX destroy bullet request
+            var vfxBuffer = VFXDestroyBulletEventLookup[VFXDestroyEntity];
+
+            vfxBuffer.Add(new VFXDestroyBulletEvent
+            {
+                ProjectileId = bulletData.ProjectileId
+            });
+
             DestroyEntityLookup.SetComponentEnabled(bulletEntity, true);
+
         }
 
     }

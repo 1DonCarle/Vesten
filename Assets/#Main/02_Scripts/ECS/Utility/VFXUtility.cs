@@ -34,8 +34,12 @@ public struct VFXPlayerAttackRequest
     public Vector3 Color;
     public float Lifetime;
     public float Damage;
-
-        public uint ProjectileId;
+    public uint ProjectileId;
+}
+[VFXType(VFXTypeAttribute.Usage.GraphicsBuffer)]
+public struct VFXDestroyBulletRequest
+{
+    public uint ProjectileId;
 }
 public static class VFXReferences
 {
@@ -50,5 +54,6 @@ public static class VFXReferences
 
     public static VisualEffect PlayerAttackGraph;
     public static GraphicsBuffer PlayerAttackRequestBuffer;
+    public static GraphicsBuffer DestroyBulletRequestBuffer;
 
 }

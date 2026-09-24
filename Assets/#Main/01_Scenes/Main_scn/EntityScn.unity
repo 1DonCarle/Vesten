@@ -252,6 +252,7 @@ MonoBehaviour:
   TimeToAim: 0.5
   DetectionRange: 10
   MagasineSize: 6
+  ExperienceAmount: 10
 --- !u!114 &407858323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -811,6 +812,7 @@ MonoBehaviour:
   TimeToAim: 0.5
   DetectionRange: 10
   MagasineSize: 6
+  ExperienceAmount: 10
 --- !u!114 &1274346971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -981,6 +983,7 @@ MonoBehaviour:
   TimeToAim: 0.5
   DetectionRange: 10
   MagasineSize: 6
+  ExperienceAmount: 10
 --- !u!114 &1507324952
 MonoBehaviour:
   m_ObjectHideFlags: 0

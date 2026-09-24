@@ -62,7 +62,36 @@ public struct VFXManager<T> where T : unmanaged
             }
         }
     }
+public void Upload(
+    VisualEffect vfxGraph,
+    ref GraphicsBuffer graphicsBuffer,
+    int requestsCountId,
+    int requestsBufferId)
+{
+    if (vfxGraph != null && graphicsBuffer != null)
+    {
+        if (!GraphIsInitialized)
+        {
+            vfxGraph.SetGraphicsBuffer(requestsBufferId, graphicsBuffer);
+            GraphIsInitialized = true;
+        }
 
+        if (graphicsBuffer.IsValid())
+        {
+            graphicsBuffer.SetData(
+                Requests,
+                0,
+                0,
+                RequestsCount.Value);
+
+            vfxGraph.SetInt(
+                requestsCountId,
+                math.min(RequestsCount.Value, Requests.Length));
+
+            RequestsCount.Value = 0;
+        }
+    }
+}
     public void AddRequest(T request)
     {
         if (RequestsCount.Value < Requests.Length)

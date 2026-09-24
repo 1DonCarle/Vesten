@@ -127,5 +127,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerBulletAuthoring
   bulletSpeed: 30
   bulletDamage: 10
-  bulletLifeTime: 2
+  bulletLifeTime: 3
   bulletPenetration: 1
