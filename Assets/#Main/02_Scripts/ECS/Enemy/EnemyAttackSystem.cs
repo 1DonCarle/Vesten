@@ -14,8 +14,8 @@ partial struct EnemyMeleeAttackSystem : ISystem
     {
         
         float deltaTime = SystemAPI.Time.DeltaTime;
-
-        Entity player = SystemAPI.GetSingletonEntity<PlayerTag>();
+ if (!SystemAPI.TryGetSingletonEntity<PlayerTag>(out var player))
+            return;
         RefRW<CharacterCurrentHitPoints> playerHP = SystemAPI.GetComponentRW<CharacterCurrentHitPoints>(player);
         float3 playerPosition = SystemAPI.GetComponent<LocalTransform>(player).Position;
 

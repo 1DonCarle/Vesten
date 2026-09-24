@@ -1,6 +1,7 @@
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Physics;
+using Unity.Transforms;
 
 [UpdateAfter(typeof(DamageSystem))]
 partial struct EnemyDeathSystem : ISystem
@@ -11,7 +12,7 @@ partial struct EnemyDeathSystem : ISystem
         var DestroyEntityLookup = SystemAPI.GetComponentLookup<DestroyEntityFlag>();
         var deltaTime = SystemAPI.Time.DeltaTime;
 
-        foreach (var (death, enemyBehaviourState, entity) in SystemAPI.Query<RefRW<Death>, RefRW<EnemyBehaviourState>>().WithAll<EnemyTag>().WithEntityAccess())
+        foreach (var (death, enemyBehaviourState,experience, entity) in SystemAPI.Query<RefRW<Death>, RefRW<EnemyBehaviourState>, RefRW<ExperienceAmount>>().WithAll<EnemyTag>().WithEntityAccess())
         {
 
             if (!death.ValueRO.IsDead)
@@ -41,6 +42,12 @@ partial struct EnemyDeathSystem : ISystem
                 continue;
             }
             // TODO: Drop loot / XP / etc
+            var buffer = SystemAPI.GetBuffer<ExperienceSpawnRequest>(entity);
+            buffer.Add(new ExperienceSpawnRequest
+            {
+                Position = SystemAPI.GetComponent<LocalTransform>(entity).Position,
+                Amount = experience.ValueRO.Value
+            });
 
             DestroyEntityLookup.SetComponentEnabled(entity, true);
 

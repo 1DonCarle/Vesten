@@ -19,6 +19,9 @@ partial struct ProjectileSpawnSystem : ISystem
         var ecb = new EntityCommandBuffer(Allocator.Temp);
         var elapsedTime = SystemAPI.Time.ElapsedTime;
 
+        var singletonEntity = SystemAPI.GetSingletonEntity<VFXPlayerAttackSingleton>();
+        var vfxSingleton = state.EntityManager.GetComponentData<VFXPlayerAttackSingleton>(singletonEntity);
+
         foreach (var (player, requests) in SystemAPI.Query<RefRO<PlayerData>, DynamicBuffer<ProjectileSpawnRequest>>())
         {
             foreach (var request in requests)
@@ -37,6 +40,19 @@ partial struct ProjectileSpawnSystem : ISystem
                 var bulletData = state.EntityManager.GetComponentData<BulletData>(player.ValueRO.BulletPrefab);
 
                 ecb.SetComponent(bullet, new BulletLifeTimestamp { Value = elapsedTime + bulletData.LifeTime });
+
+            var req = new VFXPlayerAttackRequest
+                {
+                    Position =     request.Position,
+                    Direction = request.Direction*bulletData.Speed,
+                    Color = new float3(1f, 0.5f, 0f),
+                    Lifetime = bulletData.LifeTime,
+                    Damage = bulletData.Damage,
+                    ProjectileId = (uint)bullet.Index,
+                };
+
+                // Add the request
+                vfxSingleton.Manager.AddRequest(req);
 
 
             }

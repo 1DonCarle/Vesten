@@ -24,6 +24,7 @@ public struct CharacterCurrentHitPoints : IComponentData
 {
     public int Value;
 }
+
 public struct Death : IComponentData
 {
     public bool IsDead;

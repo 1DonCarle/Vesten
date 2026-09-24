@@ -13,6 +13,10 @@ partial struct VFXOnDeathSingleton : IComponentData
 {
     public VFXManager<VFXOnDeathRequest> Manager;
 }
+partial struct VFXPlayerAttackSingleton : IComponentData
+{
+    public VFXManager<VFXPlayerAttackRequest> Manager;
+}
 partial struct VFXSystem : ISystem
 {
     private int _spawnBatchId;
@@ -23,6 +27,7 @@ partial struct VFXSystem : ISystem
     private VFXManager<VFXEnemyAttackRequest> _enemyAttackManager;
     private VFXManager<VFXImpactRequest> _impactManager;
     private VFXManager<VFXOnDeathRequest> _onDeathManager;
+    private VFXManager<VFXPlayerAttackRequest> _playerAttackManager;
 
 
 #if UNITY_ANDROID || UNITY_IOS
@@ -56,6 +61,10 @@ partial struct VFXSystem : ISystem
         _onDeathManager = new VFXManager<VFXOnDeathRequest>(
             BloodSplatterCapacity,
             ref VFXReferences.BloodSplatterRequestBuffer);
+        
+        _playerAttackManager = new VFXManager<VFXPlayerAttackRequest>(
+            MuzzleFlashCapacity,
+            ref VFXReferences.PlayerAttackRequestBuffer);
 
         state.EntityManager.AddComponentData(state.EntityManager.CreateEntity(), new VFXEnemyAttackSingleton
         {
@@ -69,12 +78,19 @@ partial struct VFXSystem : ISystem
         {
             Manager = _onDeathManager,
         });
+        state.EntityManager.AddComponentData(state.EntityManager.CreateEntity(), new VFXPlayerAttackSingleton
+        {
+            Manager = _playerAttackManager,
+        });
 
     }
 
     public void OnUpdate(ref SystemState state)
     {
         SystemAPI.QueryBuilder().WithAll<VFXEnemyAttackSingleton>().Build().CompleteDependency();
+        SystemAPI.QueryBuilder().WithAll<VFXImpactSingleton>().Build().CompleteDependency();
+        SystemAPI.QueryBuilder().WithAll<VFXOnDeathSingleton>().Build().CompleteDependency();
+        SystemAPI.QueryBuilder().WithAll<VFXPlayerAttackSingleton>().Build().CompleteDependency();
         float rateRatio = SystemAPI.Time.DeltaTime / Time.deltaTime;
 
         _enemyAttackManager.Update(
@@ -100,6 +116,14 @@ partial struct VFXSystem : ISystem
             _spawnBatchId,
             _requestsCountId,
             _requestsBufferId);
+
+        _playerAttackManager.Update(
+            VFXReferences.PlayerAttackGraph,
+            ref VFXReferences.PlayerAttackRequestBuffer,
+            rateRatio,
+            _spawnBatchId,
+            _requestsCountId,
+            _requestsBufferId);
     }
 
     public void OnDestroy(ref SystemState state)
@@ -107,5 +131,6 @@ partial struct VFXSystem : ISystem
         _enemyAttackManager.Dispose(ref VFXReferences.MuzzleFlashRequestBuffer);
         _impactManager.Dispose(ref VFXReferences.ImpactRequestBuffer);
         _onDeathManager.Dispose(ref VFXReferences.BloodSplatterRequestBuffer);
+        _playerAttackManager.Dispose(ref VFXReferences.PlayerAttackRequestBuffer);
     }
 }

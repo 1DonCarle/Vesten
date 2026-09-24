@@ -30,7 +30,10 @@ public struct EnemyConfig : IComponentData
     public AttackType AttackType;
     public float DetectionRange;
 }
-
+public struct ExperienceAmount : IComponentData
+{
+    public int Value;
+}
 public struct EnemyTarget : IComponentData
 {
     public Entity Target;
@@ -52,6 +55,7 @@ public class EnemyAuthoring : MonoBehaviour
 
     public float MagasineSize=6f;
 
+public int ExperienceAmount=10;
     private class Baker : Baker<EnemyAuthoring>
     {
         public override void Bake(EnemyAuthoring authoring)
@@ -110,7 +114,11 @@ public class EnemyAuthoring : MonoBehaviour
             AddComponent(entity, new EnemyConfig
             {
                 AttackType = authoring.AttackType,
-                DetectionRange = 10f
+                DetectionRange = authoring.DetectionRange
+            });
+            AddComponent(entity, new ExperienceAmount
+            {
+                Value = authoring.ExperienceAmount
             });
         }
     }

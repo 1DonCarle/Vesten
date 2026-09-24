@@ -2,9 +2,7 @@ using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEngine;
-using static PlayerAuthoring;
-using static ProjectileSpawnSystem;
+
 
 // I think this system will shoot towards mouse position when attack is called.
 partial struct PlayerAttackSystem : ISystem
@@ -13,9 +11,12 @@ partial struct PlayerAttackSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        var playerEntity = SystemAPI.GetSingletonEntity<PlayerTag>();
+            if (!SystemAPI.TryGetSingletonEntity<PlayerTag>(out var playerEntity))
+            return;
         var buffer = SystemAPI.GetBuffer<ProjectileSpawnRequest>(playerEntity);
-        var deltaTime = SystemAPI.Time.DeltaTime;
+
+
+
 
         foreach (var (commands, attackData) in SystemAPI.Query<RefRO<PlayerCommands>, RefRW<PlayerAttackData>>())
         {
@@ -27,21 +28,21 @@ partial struct PlayerAttackSystem : ISystem
             {
                 continue;
             }
-            float3 spawnPosition = SystemAPI.GetComponent<LocalTransform>(playerEntity).Position; // muzzle position
+            // From here
+            float3 spawnPosition = SystemAPI.GetComponent<LocalTransform>(playerEntity).Position;
 
+            // Shoot towards this
             float3 direction = math.normalize(new float3(commands.ValueRO.PointerWorldPosition.x, 0, commands.ValueRO.PointerWorldPosition.z) - new float3(spawnPosition.x, 0, spawnPosition.z));
+
+            // Create projectile entity
             buffer.Add(new ProjectileSpawnRequest
             {
                 Position = spawnPosition,
                 Direction = direction
             });
-            // Shoot towards this
 
 
 
-            // Add projectile to buffer system
-
-            // Create VFX
 
             // Subtract bullets
             attackData.ValueRW.CurrentBullets--;

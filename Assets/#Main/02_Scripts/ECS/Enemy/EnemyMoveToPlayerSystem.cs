@@ -2,8 +2,6 @@ using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
-using static EnemyAuthoring;
-using static PlayerAuthoring;
 
 [UpdateAfter(typeof(DecisionSystem))]
 partial struct EnemyMoveToPlayerSystem : ISystem
@@ -12,8 +10,9 @@ partial struct EnemyMoveToPlayerSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-  
-        var playerEntity = SystemAPI.GetSingletonEntity<PlayerTag>();
+     if (!SystemAPI.TryGetSingletonEntity<PlayerTag>(out var playerEntity))
+            return;
+        // var playerEntity = SystemAPI.GetSingletonEntity<PlayerTag>();
         var playerPosition = SystemAPI.GetComponent<LocalTransform>(playerEntity).Position.xz;
         var MoveToPlayerJob = new MoveEnemyJob
         {

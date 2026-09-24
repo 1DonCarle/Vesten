@@ -9,7 +9,8 @@ partial struct TargetingSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        var playerEntity = SystemAPI.GetSingletonEntity<PlayerTag>();
+        if (!SystemAPI.TryGetSingletonEntity<PlayerTag>(out var playerEntity))
+            return;
         var playerPosition = SystemAPI.GetComponent<LocalTransform>(playerEntity).Position.xz;
 
 
