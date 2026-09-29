@@ -1,6 +1,8 @@
 # Vesten
 
-Vesten is a Unity gameplay prototype focused on ECS-based combat, enemy behavior, and Visual Effect Graph integration. It explores how gameplay requests and physics events can flow through Unity Entities systems while presentation remains connected to Unity's managed VFX tools.
+Vesten is a Unity gameplay prototype for a top-down, Vampire Survivors-style action game. The project focuses on ECS-based combat, enemy behavior, and Visual Effect Graph integration.
+
+The main purpose of the project is to explore how gameplay requests, physics events and presentation can be connected through Unity Entities systems, while building the foundations for a game with large numbers of enemies, projectiles and effects.
 
 This repository is a work in progress. Some gameplay paths are prototypes or scaffolding, so it should be read as an evolving technical project rather than a finished game.
 
